@@ -1,0 +1,96 @@
+/* Carleton brand-informed theme
+   Colors per Communications: Blue #003069, Maize #FFD24F (web) */
+:root{
+  --blue:#003069;
+  --maize:#FFD24F;
+  --bg:#fafafa;
+  --fg:#0c1116;
+  --muted:#5b6676;
+  --panel:#ffffff;
+  --line:#e5e9f0;
+  --chip:#f1f4f9;
+  --accent: var(--blue);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115;
+    --fg:#f2f5f7;
+    --muted:#a7b0bf;
+    --panel:#121620;
+    --line:#222b3a;
+    --chip:#0f1624;
+    --accent: var(--maize);
+  }
+}
+body[data-theme="dark"]{
+  --bg:#0f1115;
+  --fg:#f2f5f7;
+  --muted:#a7b0bf;
+  --panel:#121620;
+  --line:#222b3a;
+  --chip:#0f1624;
+  --accent: var(--maize);
+}
+
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--fg);
+  font:15px/1.5 "Gotham", "Gotham SSm A","Gotham SSm B","Surveyor", Inter, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+.site-header{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 16px; background:var(--panel); border-bottom:1px solid var(--line);
+}
+.brand{display:flex; align-items:center; gap:12px}
+.brand-badge{
+  inline-size:42px; block-size:42px; border-radius:10px;
+  display:grid; place-items:center;
+  font-weight:800; letter-spacing:.02em;
+  color:#111; background:var(--maize);
+  box-shadow:0 1px 0 rgba(0,0,0,.06);
+}
+.brand-title{font-size:18px; margin:0}
+.brand-sub{margin:.25rem 0 0 0}
+
+.tabs{display:flex; flex-wrap:wrap; gap:8px; padding:8px 16px; background:var(--panel); border-bottom:1px solid var(--line)}
+.tab-btn{
+  appearance:none; border:1px solid var(--line); background:var(--chip); color:var(--fg);
+  padding:8px 12px; border-radius:999px; cursor:pointer;
+}
+.tab-btn[aria-selected="true"]{ background:var(--maize); color:#111; border-color:transparent; font-weight:700 }
+
+main{padding:16px}
+.hidden{display:none !important}
+.row{display:flex; gap:16px; flex-wrap:wrap}
+.card{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px;
+}
+.stat{font-weight:800; font-size:28px; color:var(--accent)}
+.muted{color:var(--muted)}
+.h2{font-size:16px; margin:0 0 6px 0}
+
+input[type="text"], select, .btn{
+  font:inherit; padding:10px 12px; border:1px solid var(--line); border-radius:10px;
+  background:var(--chip); color:var(--fg);
+}
+.btn.primary{ background:var(--blue); color:#fff; border-color:transparent }
+.btn.subtle{ background:transparent }
+.header-actions .btn{ margin-left:8px }
+
+.table-wrap{overflow:auto; max-height:60vh}
+table{border-collapse:collapse; width:100%}
+th,td{padding:8px 10px; border-bottom:1px solid var(--line); text-align:left}
+th{position:sticky; top:0; background:var(--panel)}
+
+.chip-row{display:flex; gap:8px; flex-wrap:wrap}
+.chip{
+  background:var(--chip); border:1px solid var(--line); border-radius:999px; padding:6px 10px; cursor:pointer
+}
+.chip[aria-pressed="true"]{ background:var(--maize); color:#111; border-color:transparent; font-weight:700 }
+
+/* High-contrast links */
+a{ color: var(--blue); }
+body[data-theme="dark"] a{ color: var(--maize); } 

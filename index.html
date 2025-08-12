@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>TOC / Host Dashboard — Carleton</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Brand-appropriate font stack:
+       Primary brand fonts are Gotham + Surveyor (licensed). We fall back to system UI/Inter if unavailable. -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="light">
+  <header class="site-header">
+    <div class="brand">
+      <div class="brand-badge" aria-hidden="true">TOC</div>
+      <div>
+        <h1 class="brand-title">TOC / Host Dashboard</h1>
+        <p class="brand-sub muted">Internal tool for TOC + Hosts. Uses Carleton Blue and Maize, with accessible contrast and simple, honest UI.</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="themeToggle" class="btn" title="Toggle theme (T)">Toggle Theme</button>
+      <a href="#about-brand" class="btn subtle">Brand</a>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Primary">
+    <button class="tab-btn" role="tab" aria-selected="true" data-tab="overview">Overview</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="applicants">Applicants</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="hosts">Hosts</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="assignments">Assignments</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="engagement">Attendance/Engagement</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="comms">Comms</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="settings">Data & Settings</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="tests">Tests</button>
+  </nav>
+
+  <main>
+    <section id="tab-overview">
+      <div class="row">
+        <div class="card">
+          <strong>Total Applicants</strong>
+          <div id="ov-applicants" class="stat">0</div>
+        </div>
+        <div class="card">
+          <strong>Total Hosts</strong>
+          <div id="ov-hosts" class="stat">0</div>
+        </div>
+        <div class="card">
+          <strong>Assignments</strong>
+          <div id="ov-assignments" class="stat">0</div>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:12px">Upload CSVs in “Data & Settings” to populate the dashboard.</p>
+    </section>
+
+    <section id="tab-applicants" class="hidden">
+      <div class="row">
+        <div class="card" style="flex:1 1 280px">
+          <label><strong>Search</strong> <input id="app-search" type="text" placeholder="Search by name or state"></label>
+          <div class="chip-row" style="margin-top:8px">
+            <button class="chip filter" data-filter="all" aria-pressed="true">All</button>
+            <button class="chip filter" data-filter="admit">Admits</button>
+            <button class="chip filter" data-filter="waitlist">Waitlist</button>
+            <button class="chip filter" data-filter="deny">Denies</button>
+          </div>
+        </div>
+      </div>
+      <div class="card table-wrap">
+        <table id="applicants-table" aria-label="Applicants table">
+          <thead>
+            <tr>
+              <th data-sort="name">Name</th>
+              <th data-sort="state">State</th>
+              <th data-sort="program">Program</th>
+              <th data-sort="decision">Decision</th>
+              <th data-sort="interest_level">Interest</th>
+              <th>Flags</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="tab-hosts" class="hidden">
+      <div class="card table-wrap">
+        <table id="hosts-table" aria-label="Hosts table">
+          <thead>
+            <tr>
+              <th data-sort="name">Host</th>
+              <th data-sort="building">Building</th>
+              <th data-sort="room">Room</th>
+              <th data-sort="capacity">Capacity</th>
+              <th data-sort="assigned">Assigned</th>
+              <th data-sort="left">Left</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="tab-assignments" class="hidden">
+      <div class="row">
+        <div class="card" style="flex:1 1 340px">
+          <label>Applicant
+            <select id="as-app"></select>
+          </label>
+          <label>Host
+            <select id="as-host"></select>
+          </label>
+          <label>Status
+            <select id="as-status">
+              <option value="assigned">assigned</option>
+              <option value="confirmed">confirmed</option>
+              <option value="canceled">canceled</option>
+              <option value="reassign">reassign</option>
+            </select>
+          </label>
+          <div style="margin-top:8px">
+            <button id="as-save" class="btn primary">Save Assignment</button>
+          </div>
+        </div>
+      </div>
+      <div class="card table-wrap">
+        <table id="assignments-table" aria-label="Assignments">
+          <thead>
+            <tr>
+              <th>Applicant</th>
+              <th>Host</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="tab-engagement" class="hidden">
+      <div class="card table-wrap">
+        <table id="eng-table" aria-label="Engagement">
+          <thead>
+            <tr>
+              <th>Applicant</th>
+              <th>Invite Sent</th>
+              <th>Attending</th>
+              <th>Checked In</th>
+              <th>No Show</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="tab-comms" class="hidden">
+      <div class="card">
+        <p class="muted">Upload a communications log CSV (columns like: <code>timestamp,recipient,campaign,subject,status,opens,clicks</code>) in Settings and we’ll summarize here.</p>
+      </div>
+      <div id="comms-summary" class="row" style="margin-top:12px"></div>
+    </section>
+
+    <section id="tab-settings" class="hidden">
+      <div class="row">
+        <div class="card">
+          <strong>Load Applicants CSV</strong><br>
+          <input id="csv-app" type="file" accept=".csv">
+        </div>
+        <div class="card">
+          <strong>Load Hosts CSV</strong><br>
+          <input id="csv-host" type="file" accept=".csv">
+        </div>
+        <div class="card">
+          <strong>Load Assignments CSV</strong><br>
+          <input id="csv-asg" type="file" accept=".csv">
+        </div>
+        <div class="card">
+          <strong>Load Engagement CSV</strong><br>
+          <input id="csv-eng" type="file" accept=".csv">
+        </div>
+        <div class="card">
+          <strong>Load Comms CSV</strong><br>
+          <input id="csv-comms" type="file" accept=".csv">
+        </div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <div class="card">
+          <button id="export-app" class="btn subtle">Export Applicants CSV</button>
+          <button id="export-host" class="btn subtle">Export Hosts CSV</button>
+          <button id="export-asg" class="btn subtle">Export Assignments CSV</button>
+          <button id="export-eng" class="btn subtle">Export Engagement CSV</button>
+          <button id="export-comms" class="btn subtle">Export Comms CSV</button>
+        </div>
+        <div class="card">
+          <button id="dl-templates" class="btn">Download CSV Templates</button>
+        </div>
+      </div>
+      <div class="card" id="about-brand" style="margin-top:12px">
+        <h2 class="h2">About the branding</h2>
+        <ul class="muted">
+          <li>Colors follow Carleton Blue <code>#003069</code> and Maize <code>#FFD24F</code> (official web hex).</li>
+          <li>Typography prefers Gotham/Surveyor when installed; falls back to Inter/system UI.</li>
+          <li>We avoid lockups or re‑creating the wordmark. C‑ray icon is not embedded here.</li>
+          <li>Contrast targets WCAG AA (≥ 4.5:1 for body).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="tab-tests" class="hidden">
+      <div class="card">
+        <strong>Self-tests</strong>
+        <pre id="test-output" class="muted"></pre>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
