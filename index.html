@@ -1,178 +1,114 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>TOC / Host Dashboard — Integrated V2</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light dark" />
-  <title>TOC / Host Dashboard — Carleton</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
   <style>
-    :root{
-      --blue:#003069; /* Carleton Blue */
-      --maize:#FFD24F; /* Maize */
-      --bg:#f7f8fb;
-      --panel:#ffffff;
-      --ink:#0f172a; /* slate-900 */
-      --muted:#475569; /* slate-600 */
-      --line:#e2e8f0; /* slate-200 */
-      --ring: rgba(0,48,105,.35);
-      --radius:16px;
-      --shadow:0 1px 2px rgba(2,6,23,.06), 0 8px 20px rgba(2,6,23,.08);
-    }
-    [data-theme="dark"]{
-      --bg:#0b1020;
-      --panel:#0f162c;
-      --ink:#e5e7eb;
-      --muted:#9ca3af;
-      --line:#1f2a44;
-      --ring: rgba(255,210,79,.35);
-      --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 20px rgba(0,0,0,.35);
-    }
+    :root{--blue:#003069;--maize:#FFD24F;--bg:#f7f8fb;--ink:#121417;--muted:#667085;--card:#fff;--line:#E5E7EB}
+    [data-theme="dark"]{--bg:#0b0f14;--ink:#e6e6e6;--card:#0f141b;--line:#1e2937}
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0;font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji"; color:var(--ink); background:linear-gradient(180deg, var(--bg), #fff0 60%), var(--bg);}    
-    .site-header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg, var(--panel), var(--panel));border-bottom:1px solid var(--line);}  
-    .site-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:1100px;margin:0 auto;padding:18px 20px;}
-    .brand{display:flex;align-items:center;gap:14px}
-    .brand-badge{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:var(--blue);color:#fff;font-weight:700;letter-spacing:.5px}
-    .brand-title{font-size:1.125rem;line-height:1.1;margin:0}
-    .brand-sub{margin:2px 0 0;color:var(--muted);font-size:.875rem}
-    .header-actions{display:flex;gap:8px;align-items:center}
-    .btn{appearance:none;border:1px solid var(--line);background:var(--panel);padding:8px 12px;border-radius:12px;color:var(--ink);cursor:pointer;box-shadow:var(--shadow);transition:transform .06s ease, box-shadow .2s ease, background .2s ease;}
-    .btn:hover{transform:translateY(-1px)}
-    .btn:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
-    .btn.primary{background:var(--blue);color:#fff;border-color:transparent}
-    .btn.subtle{box-shadow:none;border-color:var(--line)}
-
-    /* Tabs */
-    .tabs{max-width:1100px;margin:8px auto 0;display:flex;gap:6px;flex-wrap:wrap;padding:0 20px 10px;border-bottom:1px solid var(--line)}
-    .tab-btn{appearance:none;border:none;background:none;color:var(--muted);padding:10px 12px;border-radius:10px;cursor:pointer;position:relative;font-weight:600}
-    .tab-btn[aria-selected="true"]{color:var(--ink)}
-    .tab-btn[aria-selected="true"]::after{content:"";position:absolute;left:10px;right:10px;bottom:-11px;height:3px;background:linear-gradient(90deg, var(--blue), var(--maize));border-radius:3px}
-
-    main{max-width:1100px;margin:18px auto;padding:0 20px 40px}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    a{color:inherit}
+    .site-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+    .brand{display:flex;gap:12px;align-items:center}
+    .brand-badge{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--blue);color:#fff;font-weight:800}
+    .brand-title{margin:0;font-size:20px}
+    .brand-sub{margin:2px 0 0;font-size:12px}
+    .header-actions{display:flex;gap:8px}
+    .btn{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 12px;border-radius:10px;cursor:pointer}
+    .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+    .btn.subtle{background:transparent}
+    .tabs{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--card)}
+    .tab-btn{padding:8px 10px;border-radius:10px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+    .tab-btn[aria-selected="true"]{background:rgba(0,0,0,.05);color:var(--ink)}
+    main{padding:16px}
     .row{display:flex;gap:12px;flex-wrap:wrap}
-    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 14px 16px;box-shadow:var(--shadow)}
-    .stat{font-size:2rem;font-weight:800;margin-top:6px}
-
-    .muted{color:var(--muted)}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px}
+    .stat{font-size:30px;font-weight:800}
+    .table-wrap{overflow:auto}
+    table{width:100%;border-collapse:collapse}
+    th,td{border-top:1px solid var(--line);padding:8px;text-align:left}
+    th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
     .hidden{display:none}
-
-    /* Inputs */
-    label{display:flex;flex-direction:column;gap:6px;font-size:.9rem}
-    input[type="text"], select{border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:10px 12px;border-radius:12px}
-    input[type="file"]{display:none}
-    .file{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border:1px dashed var(--line);border-radius:12px;background:linear-gradient(180deg, var(--panel), var(--panel));cursor:pointer}
-
-    /* Chips */
-    .chip-row{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{appearance:none;border:1px solid var(--line);background:var(--panel);padding:6px 10px;border-radius:999px;cursor:pointer}
-    .chip[aria-pressed="true"], .chip.active{background:var(--blue);color:#fff;border-color:transparent}
-
-    /* Tables */
-    .table-wrap{flex:1 1 100%;overflow:auto;max-height:60vh}
-    table{width:100%;border-collapse:separate;border-spacing:0}
-    thead th{position:sticky;top:0;background:var(--panel);z-index:1;border-bottom:1px solid var(--line);text-align:left;font-size:.85rem;padding:10px 12px;color:var(--muted);user-select:none}
-    tbody td{padding:10px 12px;border-bottom:1px solid var(--line)}
-    tbody tr:hover{background:rgba(0,48,105,.06)}
-    th[data-sort]{cursor:pointer}
-    th[data-sort] .sort{opacity:.6;margin-left:6px;font-size:.8em}
-
-    /* Empty states */
-    .empty{display:flex;align-items:center;gap:10px;color:var(--muted);padding:12px}
-
-    /* Modal */
-    dialog{border:none;border-radius:18px;padding:0;background:var(--panel);color:var(--ink);box-shadow:var(--shadow);max-width:560px;width:calc(100% - 24px)}
-    .modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line)}
-    .modal-body{padding:18px}
-
-    /* Toast */
-    .toast{position:fixed;right:16px;bottom:16px;display:grid;gap:8px;z-index:50}
-    .toast .t{background:var(--ink);color:#fff;padding:10px 12px;border-radius:12px;opacity:.98}
-
-    @media (prefers-reduced-motion: no-preference){
-      .fade-in{animation:fade .18s ease both}
-      @keyframes fade{from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none}}
-    }
+    .muted{color:var(--muted)}
+    /* Offcanvas Host Lookup */
+    .offcanvas{position:fixed;inset:auto 0 0 auto;width:380px;max-width:100%;background:var(--card);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .25s ease;z-index:50}
+    .offcanvas.show{transform:translateX(0)}
+    .offcanvas-header{display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid var(--line)}
+    .offcanvas-body{padding:12px;display:flex;flex-direction:column;gap:10px}
+    .badge{display:inline-block;background:var(--blue);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px}
+    /* Bees */
+    .bees{position:fixed;inset:0;pointer-events:none;z-index:20}
+    .bee{position:absolute;will-change:transform;opacity:.95}
+    @keyframes buzzX{0%{transform:translateX(-10vw)}100%{transform:translateX(110vw)}}
+    @keyframes buzzY{0%{transform:translateY(var(--startY))}50%{transform:translateY(calc(var(--startY) + var(--amp)))}100%{transform:translateY(var(--startY))}}
+    @media (prefers-reduced-motion: reduce){ .bees{display:none} }
+    /* Toasts */
+    .toasts{position:fixed;bottom:12px;right:12px;display:flex;flex-direction:column;gap:8px;z-index:60}
+    .toast{background:#111;color:#fff;border-radius:10px;padding:10px 12px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .kpis{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:12px}
+    @media (max-width:900px){ .kpis{grid-template-columns:1fr} }
   </style>
 </head>
-<body data-theme="light">
+<body>
   <header class="site-header">
-    <div class="wrap">
-      <div class="brand">
-        <div class="brand-badge" aria-hidden="true">TOC</div>
-        <div>
-          <h1 class="brand-title">TOC / Host Dashboard</h1>
-          <p class="brand-sub">Internal tool for TOC + Hosts. Clean, fast, on-brand.</p>
-        </div>
+    <div class="brand">
+      <div class="brand-badge" aria-hidden="true">TOC</div>
+      <div>
+        <h1 class="brand-title">TOC / Host Dashboard</h1>
+        <p class="brand-sub muted">Carleton Blue + Maize. Accessible contrast. Honest UI.</p>
       </div>
-      <div class="header-actions">
-        <button id="themeToggle" class="btn" title="Toggle theme (T)">Toggle Theme</button>
-        <button id="brandBtn" class="btn subtle" title="Brand and access">Brand</button>
-      </div>
+    </div>
+    <div class="header-actions">
+      <button id="themeToggle" class="btn" title="Toggle theme (T)">Toggle Theme</button>
+      <button id="beesToggle" class="btn">🐝 Bees</button>
+      <a href="#about-brand" class="btn subtle">Brand</a>
     </div>
   </header>
 
   <nav class="tabs" role="tablist" aria-label="Primary">
-    <button class="tab-btn" role="tab" aria-selected="true" aria-controls="tab-overview" id="tab-overview-btn">Overview</button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-applicants" id="tab-applicants-btn">Applicants</button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-hosts" id="tab-hosts-btn">Hosts</button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-assignments" id="tab-assignments-btn">Assignments</button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-engagement" id="tab-engagement-btn">Attendance / Engagement</button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-comms" id="tab-comms-btn">Comms</button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-settings" id="tab-settings-btn">Data & Settings</button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-tests" id="tab-tests-btn">Tests</button>
+    <button class="tab-btn" role="tab" aria-selected="true" data-tab="overview">Overview</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="applicants">Applicants</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="hosts">Hosts</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="assignments">Assignments</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="engagement">Attendance/Engagement</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="comms">Comms</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="settings">Data & Settings</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="tests">Tests</button>
   </nav>
 
   <main>
-    <!-- Overview -->
-    <section id="tab-overview" role="tabpanel" aria-labelledby="tab-overview-btn">
-      <div class="row">
-        <div class="card" style="flex:1 1 220px">
-          <strong>Total Applicants</strong>
-          <div id="ov-applicants" class="stat">0</div>
-        </div>
-        <div class="card" style="flex:1 1 220px">
-          <strong>Total Hosts</strong>
-          <div id="ov-hosts" class="stat">0</div>
-        </div>
-        <div class="card" style="flex:1 1 220px">
-          <strong>Assignments</strong>
-          <div id="ov-assignments" class="stat">0</div>
-        </div>
+    <!-- OVERVIEW -->
+    <section id="tab-overview">
+      <div class="kpis">
+        <div class="card"><strong>Total Applicants</strong><div id="ov-applicants" class="stat">0</div></div>
+        <div class="card"><strong>Total Hosts</strong><div id="ov-hosts" class="stat">0</div></div>
+        <div class="card"><strong>Assignments</strong><div id="ov-assignments" class="stat">0</div></div>
       </div>
       <div class="row" style="margin-top:12px">
-        <div class="card" style="flex:1 1 320px">
-          <strong>Applicants by State</strong>
-          <canvas id="chartByState" height="180" aria-label="Applicants by state"></canvas>
-        </div>
-        <div class="card" style="flex:1 1 320px">
-          <strong>Decision Mix</strong>
-          <canvas id="chartDecision" height="180" aria-label="Decision mix"></canvas>
-        </div>
-        <div class="card" style="flex:1 1 320px">
-          <strong>Arrivals by Hour</strong>
-          <canvas id="chartArrivals" height="180" aria-label="Arrivals by hour"></canvas>
-        </div>
+        <div class="card" style="flex:1 1 420px"><strong>Arrivals by Window</strong><canvas id="chart-arrivals" height="120"></canvas></div>
+        <div class="card" style="flex:1 1 420px"><strong>Decision Mix</strong><canvas id="chart-decision" height="120"></canvas></div>
       </div>
-      <p class="muted" style="margin-top:12px">Upload CSVs in Data & Settings to populate the dashboard & charts.</p>
+      <p class="muted" style="margin-top:12px">Upload CSVs in “Data & Settings” to populate the dashboard.</p>
     </section>
 
-    <!-- Applicants -->
-    <section id="tab-applicants" class="hidden" role="tabpanel" aria-labelledby="tab-applicants-btn">
+    <!-- APPLICANTS -->
+    <section id="tab-applicants" class="hidden">
       <div class="row">
-        <div class="card" style="flex:1 1 320px">
-          <label>
-            <strong>Search</strong>
-            <input id="app-search" type="text" placeholder="Search by name, state, or program" aria-label="Search applicants" />
-          </label>
+        <div class="card" style="flex:1 1 280px">
+          <label><strong>Search</strong> <input id="app-search" type="text" placeholder="Search by name or state"></label>
           <div class="chip-row" style="margin-top:8px">
             <button class="chip filter" data-filter="all" aria-pressed="true">All</button>
-            <button class="chip filter" data-filter="admit" aria-pressed="false">Admits</button>
-            <button class="chip filter" data-filter="waitlist" aria-pressed="false">Waitlist</button>
-            <button class="chip filter" data-filter="deny" aria-pressed="false">Denies</button>
+            <button class="chip filter" data-filter="admit">Admits</button>
+            <button class="chip filter" data-filter="waitlist">Waitlist</button>
+            <button class="chip filter" data-filter="deny">Denies</button>
           </div>
         </div>
       </div>
@@ -180,48 +116,43 @@
         <table id="applicants-table" aria-label="Applicants table">
           <thead>
             <tr>
-              <th data-sort="name">Name <span class="sort">▾</span></th>
-              <th data-sort="state">State <span class="sort">▾</span></th>
-              <th data-sort="program">Program <span class="sort">▾</span></th>
-              <th data-sort="decision">Decision <span class="sort">▾</span></th>
-              <th data-sort="interest_level">Interest <span class="sort">▾</span></th>
+              <th data-sort="name">Name</th>
+              <th data-sort="state">State</th>
+              <th data-sort="program">Program</th>
+              <th data-sort="decision">Decision</th>
+              <th data-sort="interest_level">Interest</th>
               <th>Flags</th>
             </tr>
           </thead>
-          <tbody>
-            <tr class="empty"><td colspan="6">No applicants loaded yet.</td></tr>
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
     </section>
 
-    <!-- Hosts -->
-    <section id="tab-hosts" class="hidden" role="tabpanel" aria-labelledby="tab-hosts-btn">
+    <!-- HOSTS -->
+    <section id="tab-hosts" class="hidden">
       <div class="card table-wrap">
         <table id="hosts-table" aria-label="Hosts table">
           <thead>
             <tr>
-              <th data-sort="name">Host <span class="sort">▾</span></th>
-              <th data-sort="building">Building <span class="sort">▾</span></th>
-              <th data-sort="room">Room <span class="sort">▾</span></th>
-              <th data-sort="capacity">Capacity <span class="sort">▾</span></th>
-              <th data-sort="assigned">Assigned <span class="sort">▾</span></th>
-              <th data-sort="left">Left <span class="sort">▾</span></th>
+              <th data-sort="name">Host</th>
+              <th data-sort="building">Building</th>
+              <th data-sort="room">Room</th>
+              <th data-sort="capacity">Capacity</th>
+              <th data-sort="assigned">Assigned</th>
+              <th data-sort="left">Left</th>
               <th>Notes</th>
             </tr>
           </thead>
-          <tbody>
-            <tr class="empty"><td colspan="7">No hosts loaded yet.</td></tr>
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
     </section>
 
-    <!-- Assignments -->
-    <section id="tab-assignments" class="hidden" role="tabpanel" aria-labelledby="tab-assignments-btn">
+    <!-- ASSIGNMENTS / MATCHING -->
+    <section id="tab-assignments" class="hidden">
       <div class="row">
-        <div class="card" style="flex:1 1 380px">
-          <strong>Manual Assignment</strong>
+        <div class="card" style="flex:1 1 360px">
           <label>Applicant
             <select id="as-app"></select>
           </label>
@@ -238,32 +169,8 @@
           </label>
           <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
             <button id="as-save" class="btn primary">Save Assignment</button>
-            <button id="as-clear" class="btn subtle">Clear All Assignments</button>
+            <button id="run-match" class="btn">Auto‑Match (Greedy)</button>
           </div>
-        </div>
-        <div class="card" style="flex:2 1 520px">
-          <strong>Auto-Match</strong>
-          <p class="muted" style="margin:6px 0 10px">Click “Run Matcher” to pair applicants to hosts based on preferences and constraints. Adjust weights as needed.</p>
-          <div class="row">
-            <div class="card" style="flex:1 1 220px">
-              <label>Weight: Capacity fit <input id="w-capacity" type="range" min="0" max="5" step="1" value="5"></label>
-              <label>Weight: Gender/rooming prefs <input id="w-gender" type="range" min="0" max="5" step="1" value="5"></label>
-              <label>Weight: Program affinity <input id="w-program" type="range" min="0" max="5" step="1" value="3"></label>
-              <label>Weight: Arrival time proximity <input id="w-arrival" type="range" min="0" max="5" step="1" value="2"></label>
-              <label>Weight: Quiet/Allergy prefs <input id="w-prefs" type="range" min="0" max="5" step="1" value="4"></label>
-            </div>
-            <div class="card" style="flex:1 1 220px">
-              <label><input id="opt-keep-existing" type="checkbox" checked> Respect existing confirmed assignments</label>
-              <label><input id="opt-fair-distribution" type="checkbox" checked> Balance across hosts</label>
-              <label><input id="opt-strict-prefs" type="checkbox"> Strictly enforce critical prefs</label>
-            </div>
-          </div>
-          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
-            <button id="run-match" class="btn primary">Run Matcher</button>
-            <button id="preview-match" class="btn subtle">Preview Changes</button>
-            <button id="apply-match" class="btn subtle" disabled>Apply Suggested Matches</button>
-          </div>
-          <div id="match-preview" class="muted" style="margin-top:10px"></div>
         </div>
       </div>
       <div class="card table-wrap">
@@ -276,15 +183,13 @@
               <th>Score</th>
             </tr>
           </thead>
-          <tbody>
-            <tr class="empty"><td colspan="4">No assignments yet.</td></tr>
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
     </section>
 
-    <!-- Engagement -->
-    <section id="tab-engagement" class="hidden" role="tabpanel" aria-labelledby="tab-engagement-btn">
+    <!-- ENGAGEMENT -->
+    <section id="tab-engagement" class="hidden">
       <div class="card table-wrap">
         <table id="eng-table" aria-label="Engagement">
           <thead>
@@ -297,373 +202,325 @@
               <th>Notes</th>
             </tr>
           </thead>
-          <tbody>
-            <tr class="empty"><td colspan="6">No engagement data yet.</td></tr>
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
     </section>
 
-    <!-- Comms -->
-    <section id="tab-comms" class="hidden" role="tabpanel" aria-labelledby="tab-comms-btn">
+    <!-- COMMS -->
+    <section id="tab-comms" class="hidden">
       <div class="card">
-        <p class="muted">Upload a communications log CSV with columns: <code>timestamp,recipient,campaign,subject,status,opens,clicks</code>. We'll summarize deliverability + engagement here.</p>
+        <p class="muted">Upload a communications log CSV (columns like: <code>timestamp,recipient,campaign,subject,status,opens,clicks</code>) in Settings and we’ll summarize here.</p>
       </div>
       <div id="comms-summary" class="row" style="margin-top:12px"></div>
     </section>
 
-    <!-- Settings -->
-    <section id="tab-settings" class="hidden" role="tabpanel" aria-labelledby="tab-settings-btn">
+    <!-- SETTINGS / BACKEND -->
+    <section id="tab-settings" class="hidden">
       <div class="row">
-        <div class="card"><strong>Load Applicants CSV</strong><br>
-          <label class="file"><input id="csv-app" type="file" accept=".csv">Choose file</label>
+        <div class="card" style="flex:1 1 260px">
+          <strong>Load Applicants CSV</strong><br />
+          <input id="csv-app" type="file" accept=".csv" />
         </div>
-        <div class="card"><strong>Load Hosts CSV</strong><br>
-          <label class="file"><input id="csv-host" type="file" accept=".csv">Choose file</label>
+        <div class="card" style="flex:1 1 260px">
+          <strong>Load Hosts CSV</strong><br />
+          <input id="csv-host" type="file" accept=".csv" />
         </div>
-        <div class="card"><strong>Load Assignments CSV</strong><br>
-          <label class="file"><input id="csv-asg" type="file" accept=".csv">Choose file</label>
+        <div class="card" style="flex:1 1 260px">
+          <strong>Load Assignments CSV</strong><br />
+          <input id="csv-asg" type="file" accept=".csv" />
         </div>
-        <div class="card"><strong>Load Engagement CSV</strong><br>
-          <label class="file"><input id="csv-eng" type="file" accept=".csv">Choose file</label>
+        <div class="card" style="flex:1 1 260px">
+          <strong>Load Engagement CSV</strong><br />
+          <input id="csv-eng" type="file" accept=".csv" />
         </div>
-        <div class="card"><strong>Load Comms CSV</strong><br>
-          <label class="file"><input id="csv-comms" type="file" accept=".csv">Choose file</label>
+        <div class="card" style="flex:1 1 260px">
+          <strong>Load Comms CSV</strong><br />
+          <input id="csv-comms" type="file" accept=".csv" />
         </div>
       </div>
       <div class="row" style="margin-top:12px">
-        <div class="card" style="display:flex;gap:8px;flex-wrap:wrap">
+        <div class="card" style="flex:2 1 420px;display:flex;gap:8px;flex-wrap:wrap">
           <button id="export-app" class="btn subtle">Export Applicants CSV</button>
           <button id="export-host" class="btn subtle">Export Hosts CSV</button>
           <button id="export-asg" class="btn subtle">Export Assignments CSV</button>
           <button id="export-eng" class="btn subtle">Export Engagement CSV</button>
           <button id="export-comms" class="btn subtle">Export Comms CSV</button>
-        </div>
-        <div class="card">
           <button id="dl-templates" class="btn">Download CSV Templates</button>
+        </div>
+        <div class="card" id="about-brand" style="flex:1 1 320px">
+          <h2 class="h2" style="margin:0 0 8px">About the branding</h2>
+          <ul class="muted">
+            <li>Colors: Carleton Blue <code>#003069</code> and Maize <code>#FFD24F</code>.</li>
+            <li>Typography: Gotham/Surveyor; fallback Inter/system UI.</li>
+            <li>No lockups or re‑created wordmarks. C‑ray not embedded.</li>
+            <li>Contrast targets WCAG AA (≥ 4.5:1 for body).</li>
+          </ul>
         </div>
       </div>
     </section>
 
-    <!-- Tests -->
-    <section id="tab-tests" class="hidden" role="tabpanel" aria-labelledby="tab-tests-btn">
+    <!-- TESTS -->
+    <section id="tab-tests" class="hidden">
       <div class="card">
         <strong>Self-tests</strong>
-        <pre id="test-output" class="muted"></pre>
+        <div style="margin-top:8px"><button id="run-tests" class="btn">Run Self Tests</button></div>
+        <pre id="test-output" class="muted" style="margin-top:8px"></pre>
       </div>
     </section>
   </main>
 
-  <!-- Brand modal -->
-  <dialog id="brandModal">
-    <div class="modal-head">
-      <strong>Brand + Accessibility</strong>
-      <button class="btn subtle" id="brandClose">Close</button>
+  <!-- Host Lookup Offcanvas -->
+  <aside id="host-panel" class="offcanvas" aria-labelledby="host-panel-title" aria-hidden="true">
+    <div class="offcanvas-header">
+      <strong id="host-panel-title">Host Lookup</strong>
+      <button class="btn" id="close-host-panel">Close</button>
     </div>
-    <div class="modal-body">
-      <ul>
-        <li>Colors use Carleton Blue <code>#003069</code> and Maize <code>#FFD24F</code>.</li>
-        <li>Typography prefers Gotham/Surveyor when available; falls back to Inter/system UI.</li>
-        <li>Contrast targets WCAG AA for body text. Focus states are visible.</li>
-        <li>Keyboard: use Left/Right to move tabs, Enter/Space to select.</li>
-      </ul>
+    <div class="offcanvas-body">
+      <input id="host-search" class="btn" style="width:100%" placeholder="Search name, building, room, phone" />
+      <ul id="host-list" style="list-style:none;margin:0;padding:0;max-height:40vh;overflow:auto"></ul>
+      <div id="host-detail" class="card" style="min-height:120px"></div>
+      <div>
+        <button class="btn" id="host-copy">Copy contact</button>
+        <button class="btn" id="host-print">Print host card</button>
+      </div>
     </div>
-  </dialog>
+  </aside>
 
-  <div class="toast" id="toast" aria-live="polite" aria-atomic="true"></div>
+  <!-- Bees layer & Toasts -->
+  <div class="bees" id="bees"></div>
+  <div class="toasts" id="toasts"></div>
 
   <script>
-    const $ = (sel, ctx=document) => ctx.querySelector(sel);
-    const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+  (function(){
+    // ---------------------------- State ----------------------------
+    const state = { applicants: [], hosts: [], assignments: [], engagement: [], comms: [] };
+    const $ = (s,r=document)=> r.querySelector(s);
+    const $$ = (s,r=document)=> Array.from(r.querySelectorAll(s));
 
-    const state = {
-      applicants: [],
-      hosts: [],
-      assignments: [],
-      engagement: [],
-      comms: [],
-      proposedMatches: []
+    // ---------------------------- Tabs ----------------------------
+    $$('.tab-btn').forEach(btn=> btn.addEventListener('click', e=>{
+      const tab = btn.dataset.tab; $$('.tab-btn').forEach(b=> b.setAttribute('aria-selected', String(b===btn)));
+      $$('main > section').forEach(sec=> sec.classList.toggle('hidden', sec.id !== 'tab-'+tab));
+    }));
+
+    // ---------------------------- Theme ----------------------------
+    $('#themeToggle').addEventListener('click', ()=>{
+      const root=document.documentElement; const dark = root.getAttribute('data-theme')==='dark';
+      root.setAttribute('data-theme', dark?'light':'dark'); toast('Theme → '+(dark?'light':'dark'));
+    });
+
+    // ---------------------------- Bees ----------------------------
+    const beesLayer = $('#bees'); let beesOn = true;
+    function spawnBees(N=6){ if(matchMedia('(prefers-reduced-motion: reduce)').matches) return; beesLayer.innerHTML='';
+      for(let i=0;i<N;i++){ const b=document.createElement('div'); b.className='bee'; const size=18+Math.round(Math.random()*16);
+        const startY=(10+Math.random()*80)+'vh'; b.style.setProperty('--startY', startY); b.style.setProperty('--amp', (6+Math.random()*16)+'px');
+        b.style.top=startY; b.style.left=(-10-Math.random()*20)+'vw'; b.style.animation=`buzzX ${18+Math.random()*12}s linear ${Math.random()*-20}s infinite, buzzY ${5+Math.random()*6}s ease-in-out ${Math.random()*-10}s infinite`;
+        b.innerHTML=`<svg width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true"><g><ellipse cx="28" cy="34" rx="14" ry="10" fill="#FFD24F" stroke="#222" stroke-width="2"/><rect x="19" y="26" width="18" height="16" fill="#ffb300" opacity=".6"/><circle cx="42" cy="34" r="8" fill="#ffe08a" stroke="#222" stroke-width="2"/><path d="M40 25c6-6 10-4 12 0" stroke="#8ecae6" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M38 22c6-6 10-4 12 0" stroke="#8ecae6" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="46" cy="32" r="2" fill="#222"/></g></svg>`;
+        beesLayer.appendChild(b);
+      }
+    }
+    spawnBees();
+    $('#beesToggle').addEventListener('click', ()=>{ beesOn=!beesOn; beesLayer.style.display = beesOn?'block':'none'; if(beesOn) spawnBees(); });
+
+    // ---------------------------- Toasts ----------------------------
+    function toast(msg, ms=1600){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; $('#toasts').appendChild(t); setTimeout(()=> t.remove(), ms); }
+
+    // ---------------------------- CSV parsing ----------------------------
+    function parseCSV(text){ const rows=[]; let i=0, field='', row=[], inQ=false; text=text.replace(/\r/g,'');
+      while(i<text.length){ const ch=text[i++]; if(inQ){ if(ch==='"'){ if(text[i]==='"'){ field+='"'; i++; } else { inQ=false; } } else field+=ch; }
+        else { if(ch==='"'){ inQ=true; } else if(ch===','){ row.push(field); field=''; } else if(ch==='\n'){ row.push(field); rows.push(row.map(c=>c.trim())); row=[]; field=''; } else field+=ch; } }
+      if(field.length||row.length){ row.push(field); rows.push(row.map(c=>c.trim())); }
+      const headers = (rows.shift()||[]).map(h=>h.trim());
+      return rows.filter(r=> r.length && r.some(v=> v!==''))
+                 .map(r=> Object.fromEntries(headers.map((h,idx)=> [h, (r[idx]||'')])));
+    }
+
+    // ---------------------------- Data routing ----------------------------
+    const inputs = {
+      '#csv-app': data => { state.applicants = data; onApplicants(); },
+      '#csv-host': data => { state.hosts = data; onHosts(); },
+      '#csv-asg':  data => { state.assignments = data; onAssignments(); },
+      '#csv-eng':  data => { state.engagement = data; renderEngagement(); },
+      '#csv-comms':data => { state.comms = data; renderComms(); }
     };
-
-    // Theme toggle
-    const themeToggle = $('#themeToggle');
-    themeToggle.addEventListener('click', () => toggleTheme());
-    document.addEventListener('keydown', e=>{ if(e.key.toLowerCase()==='t') toggleTheme();});
-    function toggleTheme(){
-      const root = document.body;
-      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      toast(`Theme: ${next}`);
-    }
-
-    // Tabs
-    const tabButtons = $$('.tab-btn');
-    tabButtons.forEach(btn=>{
-      btn.addEventListener('click', ()=>activateTab(btn));
-      btn.addEventListener('keydown', (e)=>{
-        const idx = tabButtons.indexOf(btn);
-        if(e.key==='ArrowRight'){ (tabButtons[idx+1]||tabButtons[0]).focus(); }
-        if(e.key==='ArrowLeft'){ (tabButtons[idx-1]||tabButtons[tabButtons.length-1]).focus(); }
-        if(e.key==='Enter' || e.key===' '){ activateTab(btn); }
-      });
-    });
-    function activateTab(btn){
-      tabButtons.forEach(b=>b.setAttribute('aria-selected','false'));
-      btn.setAttribute('aria-selected','true');
-      $$('main > section').forEach(s=>s.classList.add('hidden'));
-      const panel = document.getElementById(btn.getAttribute('aria-controls'));
-      panel.classList.remove('hidden');
-    }
-
-    // Sort tables
-    function sortTable(table, key, dir=1){
-      const idx = Array.from(table.tHead.rows[0].cells).findIndex(th=> th.dataset.sort===key);
-      if(idx<0) return;
-      const rows = Array.from(table.tBodies[0].rows).filter(r=>!r.classList.contains('empty'));
-      rows.sort((a,b)=>{
-        const va = a.cells[idx].innerText.trim().toLowerCase();
-        const vb = b.cells[idx].innerText.trim().toLowerCase();
-        return va>vb?dir:va<vb?-dir:0;
-      });
-      rows.forEach(r=>table.tBodies[0].appendChild(r));
-    }
-    $$('th[data-sort]').forEach(th=>{
-      let dir = 1;
-      th.addEventListener('click', ()=>{ dir*=-1; sortTable(th.closest('table'), th.dataset.sort, dir); });
+    Object.keys(inputs).forEach(sel=>{
+      $(sel).addEventListener('change', async (e)=>{ const f=e.target.files[0]; if(!f) return; const txt=await f.text(); const data=parseCSV(txt); inputs[sel](data); toast(`Loaded ${f.name} • ${data.length} rows`); });
     });
 
-    // Chips filtering (Applicants)
-    $$('.chip.filter').forEach(ch=>{
-      ch.addEventListener('click', ()=>{
-        $$('.chip.filter').forEach(b=>b.setAttribute('aria-pressed','false'));
-        ch.setAttribute('aria-pressed','true');
-        filterApplicants();
+    // ---------------------------- Overview & Charts ----------------------------
+    let arrivalsChart=null, decisionChart=null;
+    function onApplicants(){ $('#ov-applicants').textContent = state.applicants.length; renderApplicants(); drawArrivals(); drawDecision(); fillAssignmentSelects(); calcLeft(); }
+    function onHosts(){ $('#ov-hosts').textContent = state.hosts.length; renderHosts(); fillAssignmentSelects(); calcLeft(); buildHostList(); }
+    function onAssignments(){ $('#ov-assignments').textContent = state.assignments.length; renderAssignments(); calcLeft(); buildHostList(); }
+
+    function drawArrivals(){ const buckets={morning:0,afternoon:0,evening:0};
+      state.applicants.forEach(a=>{ const h=extractHour(a.arrival_time); if(isNaN(h)) return; if(h<12)buckets.morning++; else if(h<18)buckets.afternoon++; else buckets.evening++; });
+      const ctx=$('#chart-arrivals'); if(arrivalsChart) arrivalsChart.destroy();
+      arrivalsChart=new Chart(ctx,{type:'bar', data:{labels:['Morning','Afternoon','Evening'], datasets:[{label:'Arrivals', data:[buckets.morning,buckets.afternoon,buckets.evening]}]}, options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
+    }
+    function drawDecision(){ const mix = state.applicants.reduce((m,a)=>{ const k=(a.decision||'Unknown'); m[k]=(m[k]||0)+1; return m; },{});
+      const ctx=$('#chart-decision'); if(decisionChart) decisionChart.destroy();
+      decisionChart=new Chart(ctx,{type:'doughnut', data:{labels:Object.keys(mix), datasets:[{data:Object.values(mix)}]}, options:{plugins:{legend:{position:'bottom'}}}});
+    }
+
+    // ---------------------------- Applicants table ----------------------------
+    $('#app-search').addEventListener('input', renderApplicants);
+    $$('.filter').forEach(b=> b.addEventListener('click', ()=>{ $$('.filter').forEach(x=> x.setAttribute('aria-pressed','false')); b.setAttribute('aria-pressed','true'); renderApplicants(); }));
+    function renderApplicants(){ const q=($('#app-search').value||'').toLowerCase(); const filt=($$('.filter[aria-pressed="true"]')[0]?.dataset.filter)||'all';
+      const tb=$('#applicants-table tbody'); tb.innerHTML='';
+      state.applicants.filter(a=> (filt==='all'||(a.decision||'').toLowerCase().includes(filt)))
+        .filter(a=> !q || [a.name,a.state].some(v=> String(v||'').toLowerCase().includes(q)))
+        .forEach(a=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${esc(a.name)}</td><td>${esc(a.state)}</td><td>${esc(a.program)}</td><td>${esc(a.decision)}</td><td>${esc(a.interest_level)}</td><td>${esc(a.flags||'')}</td>`; tb.appendChild(tr); });
+    }
+
+    // ---------------------------- Hosts table + Host lookup ----------------------------
+    function calcLeft(){ // compute assigned & left based on assignments
+      const byHost = new Map();
+      state.assignments.forEach(a=>{ const h=a.host; byHost.set(h, (byHost.get(h)||0)+1); });
+      state.hosts = state.hosts.map(h=> ({...h, assigned: byHost.get(h.id||h.name)||0, left: Math.max(0,(+h.capacity||0) - (byHost.get(h.id||h.name)||0)) }));
+      renderHosts();
+    }
+    function renderHosts(){ const tb=$('#hosts-table tbody'); tb.innerHTML='';
+      state.hosts.forEach(h=>{ const tr=document.createElement('tr'); const key=String(h.id||h.name);
+        tr.innerHTML=`<td><a href="#" data-open-host="${esc(key)}">${esc(h.name)}</a></td><td>${esc(h.building)}</td><td>${esc(h.room)}</td><td>${esc(h.capacity)}</td><td>${esc(h.assigned||0)}</td><td>${esc(h.left||0)}</td><td>${esc(h.notes||'')}</td>`;
+        tr.querySelector('[data-open-host]').addEventListener('click', (e)=>{ e.preventDefault(); openHost(key); });
+        tb.appendChild(tr);
       });
+    }
+
+    // Offcanvas host panel
+    function openHost(key){ const panel=$('#host-panel'); panel.classList.add('show'); panel.setAttribute('aria-hidden','false');
+      const h = state.hosts.find(x=> String(x.id||x.name)===String(key))||{};
+      $('#host-detail').innerHTML=`<div style="display:flex;align-items:center;gap:10px"><div style="width:40px;height:40px;border-radius:999px;background:#e2e8f0;display:grid;place-items:center;font-weight:800">${esc((h.name||'?').slice(0,1).toUpperCase())}</div><div><div style="font-weight:700">${esc(h.name||'—')}</div><div class="muted">${esc(h.building||'—')} ${h.room?('• '+esc(h.room)):''}</div></div></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">${h.phone?`<a class="btn" href="tel:${encodeURIComponent(h.phone)}">${esc(h.phone)}</a>`:''}${h.email?`<a class="btn" href="mailto:${encodeURIComponent(h.email)}">${esc(h.email)}</a>`:''}</div>
+      <div style="display:flex;gap:12px;margin-top:8px"><div><div class="muted">Capacity</div><div><span class="badge">${esc(h.capacity||'—')}</span></div></div><div><div class="muted">Left</div><div><span class="badge">${esc(h.left||'—')}</span></div></div><div><div class="muted">Available Hour</div><div>${esc(h.available_hour||'—')}</div></div></div>
+      <div style="margin-top:8px" class="muted">${esc(h.notes||'')}</div>`;
+      const students = state.assignments.filter(a=> String(a.host)===String(key)).map(a=> a.applicant);
+      const nameOf = id => state.applicants.find(x=> String(x.id||x.name)===String(id))?.name || id;
+      $('#host-detail').insertAdjacentHTML('beforeend', `<div style="margin-top:8px"><strong>Students</strong><ul style="margin:6px 0 0;padding:0 0 0 16px">${students.map(s=>` + "`<li>${esc(nameOf(s))}</li>``` + `).join('')||'<li class="muted">None yet.</li>'}</ul></div>`);
+      $('#host-copy').onclick=()=>{ const txt=`${h.name||''}\n${h.email||''}\n${h.phone||''}\n${h.building||''} ${h.room||''}`.trim(); navigator.clipboard.writeText(txt).then(()=> toast('Host copied')); };
+      $('#host-print').onclick=()=>{ const w=window.open('', '_blank'); const html=getHostPrintHTML(h, students, nameOf); w.document.write(html); w.document.close(); };
+    }
+    $('#close-host-panel').addEventListener('click', ()=>{ const panel=$('#host-panel'); panel.classList.remove('show'); panel.setAttribute('aria-hidden','true'); });
+    $('#host-search').addEventListener('input', (e)=> buildHostList(e.target.value));
+    function buildHostList(q=''){ const list=$('#host-list'); list.innerHTML=''; const term=(q||'').toLowerCase();
+      const hosts=state.hosts.filter(h=> !term || [h.name,h.room,h.phone,h.email,h.building].some(v=> String(v||'').toLowerCase().includes(term)) ).sort((a,b)=> String(a.name||'').localeCompare(String(b.name||'')));
+      hosts.forEach(h=>{ const li=document.createElement('li'); li.style.padding='6px 0'; li.innerHTML=`<a href="#" data-open-host="${esc(h.id||h.name)}">${esc(h.name)} <span class="muted">• ${esc(h.room||'')}</span></a>`; li.querySelector('a').addEventListener('click', (ev)=>{ ev.preventDefault(); openHost(h.id||h.name); }); list.appendChild(li); });
+      if(!hosts.length){ list.innerHTML='<li class="muted">No hosts</li>'; }
+    }
+
+    // ---------------------------- Assignments (manual + matcher) ----------------------------
+    function fillAssignmentSelects(){ const sApp=$('#as-app'), sHost=$('#as-host'); if(!sApp||!sHost) return; sApp.innerHTML=''; sHost.innerHTML='';
+      state.applicants.forEach(a=> sApp.insertAdjacentHTML('beforeend', `<option value="${escAttr(a.id||a.name)}">${esc(a.name||a.id)}</option>`));
+      state.hosts.forEach(h=> sHost.insertAdjacentHTML('beforeend', `<option value="${escAttr(h.id||h.name)}">${esc(h.name||h.id)} (${esc(h.left??h.capacity??'')})</option>`));
+    }
+    $('#as-save').addEventListener('click', ()=>{ const app=$('#as-app').value; const host=$('#as-host').value; const status=$('#as-status').value||'assigned';
+      const idx=state.assignments.findIndex(a=> String(a.applicant)===String(app)); if(idx>-1){ state.assignments[idx]={...state.assignments[idx], host, status}; } else { state.assignments.push({applicant:app, host, status}); }
+      onAssignments(); toast('Assignment saved');
     });
-    $('#app-search').addEventListener('input', filterApplicants);
+    $('#run-match').addEventListener('click', runGreedy);
+    function extractHour(t){ const m=String(t||'').match(/\b(\d{1,2})(?::\d{2})?/); return m? (Number(m[1])%24) : NaN; }
+    function runGreedy(){ if(!state.applicants.length || !state.hosts.length){ toast('Load applicants + hosts first'); return; }
+      const capLeft=new Map(state.hosts.map(h=> [String(h.id||h.name), Math.max(0,(+h.capacity||0) - (+h.assigned||0))]));
+      const hostHour=new Map(state.hosts.map(h=> [String(h.id||h.name), extractHour(h.available_hour)||12]));
+      const taken=new Set(state.assignments.filter(a=> String(a.status||'').toLowerCase()==='confirmed').map(a=> String(a.applicant)));
+      const scores=[];
+      for(const a of state.applicants){ const ak=String(a.id||a.name); if(taken.has(ak)) continue; const ah=extractHour(a.arrival_time)||12; for(const h of state.hosts){ const hk=String(h.id||h.name); if((capLeft.get(hk)||0)<=0) continue; const s = 100 - Math.min(100, Math.abs(ah-(hostHour.get(hk)||12))*10); scores.push({ak,hk,score:s}); } }
+      scores.sort((x,y)=> y.score-x.score);
+      const used=new Set(); const out=[]; for(const p of scores){ if(used.has(p.ak)) continue; if((capLeft.get(p.hk)||0)<=0) continue; out.push({applicant:p.ak, host:p.hk, status:'assigned', score:Math.round(p.score)}); used.add(p.ak); capLeft.set(p.hk, capLeft.get(p.hk)-1); }
+      state.assignments = mergeAssignments(state.assignments, out);
+      onAssignments(); toast(`Auto‑matched ${out.length}`);
+    }
+    function mergeAssignments(oldA, newA){ const by=new Map(oldA.map(a=> [String(a.applicant), a])); newA.forEach(n=> by.set(String(n.applicant), n)); return Array.from(by.values()); }
 
-    function filterApplicants(){
-      const q = $('#app-search').value.trim().toLowerCase();
-      const active = $('.chip.filter[aria-pressed="true"]').dataset.filter;
-      const tbody = $('#applicants-table tbody');
-      tbody.innerHTML = '';
-      const list = state.applicants.filter(a=>{
-        const textMatch = !q || [a.name,a.state,a.program].some(v=> (v||'').toLowerCase().includes(q));
-        const dec = (a.decision||'').toLowerCase();
-        const filterMatch = active==='all' || dec===active;
-        return textMatch && filterMatch;
-      });
-      if(list.length===0){
-        tbody.innerHTML = '<tr class="empty"><td colspan="6">No matching applicants.</td></tr>';
-        return;
-      }
-      for(const a of list){
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${esc(a.name)}</td>
-                        <td>${esc(a.state)}</td>
-                        <td>${esc(a.program)}</td>
-                        <td>${esc(a.decision)}</td>
-                        <td>${esc(a.interest_level||'')}</td>
-                        <td>${esc(a.flags||'')}</td>`;
-        tbody.appendChild(tr);
-      }
+    function renderAssignments(){ const tb=$('#assignments-table tbody'); tb.innerHTML='';
+      const nameOf=id=> state.applicants.find(a=> String(a.id||a.name)===String(id))?.name || id;
+      state.assignments.forEach(a=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${esc(nameOf(a.applicant))}</td><td><a href="#" data-open-host="${esc(a.host)}">${esc(a.host)}</a></td><td>${esc(a.status||'')}</td><td>${esc(a.score||'')}</td>`; tr.querySelector('[data-open-host]').addEventListener('click', (e)=>{ e.preventDefault(); openHost(a.host);}); tb.appendChild(tr); });
     }
 
-    // CSV loading (simple parser; quotes not fully supported)
-    const pickers = [
-      ['#csv-app','applicants', onApplicantsLoaded],
-      ['#csv-host','hosts', onHostsLoaded],
-      ['#csv-asg','assignments', onAssignmentsLoaded],
-      ['#csv-eng','engagement', onEngagementLoaded],
-      ['#csv-comms','comms', onCommsLoaded]
-    ];
-    pickers.forEach(([sel, key, fn])=>{
-      $(sel).addEventListener('change', async (e)=>{
-        const file = e.target.files?.[0];
-        if(!file) return;
-        const text = await file.text();
-        const data = csvToObjects(text);
-        state[key] = data;
-        fn?.(data);
-        toast(`${file.name} loaded: ${data.length} rows`);
-      });
-    });
-
-    function csvToObjects(csv){
-      const lines = csv.replace(/\r/g,'').split('\n').filter(Boolean);
-      if(lines.length===0) return [];
-      const headers = lines[0].split(',').map(h=>h.trim());
-      return lines.slice(1).map(line=>{
-        const cols = line.split(',');
-        const obj = {}; headers.forEach((h,i)=> obj[h] = (cols[i]||'').trim());
-        return obj;
-      });
+    // ---------------------------- Engagement & Comms (basic) ----------------------------
+    function renderEngagement(){ const tb=$('#eng-table tbody'); if(!tb) return; tb.innerHTML=''; state.engagement.forEach(r=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${esc(r.applicant)}</td><td>${esc(r.invite_sent)}</td><td>${esc(r.attending)}</td><td>${esc(r.checked_in)}</td><td>${esc(r.no_show)}</td><td>${esc(r.notes)}</td>`; tb.appendChild(tr); }); }
+    function renderComms(){ const c=$('#comms-summary'); if(!c) return; c.innerHTML=''; if(!state.comms.length){ c.innerHTML='<div class="muted">No comms loaded</div>'; return; }
+      const byCampaign = state.comms.reduce((m,r)=>{ const k=r.campaign||'—'; const s=m[k]||{sent:0,open:0,click:0}; s.sent++; s.open += (+r.opens||0); s.click += (+r.clicks||0); m[k]=s; return m; },{});
+      Object.entries(byCampaign).forEach(([k,v])=>{ const card=document.createElement('div'); card.className='card'; card.style.flex='1 1 240px'; card.innerHTML=`<strong>${esc(k)}</strong><div class=muted>Sent: ${v.sent} • Opens: ${v.open} • Clicks: ${v.click}</div>`; c.appendChild(card); });
     }
 
-    function onApplicantsLoaded(list){
-      // Update overview
-      $('#ov-applicants').textContent = list.length;
-      // Fill table
-      const tbody = $('#applicants-table tbody');
-      tbody.innerHTML='';
-      list.forEach(a=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${esc(a.name||a.full_name||'')}</td>
-                        <td>${esc(a.state||'')}</td>
-                        <td>${esc(a.program||'')}</td>
-                        <td>${esc(a.decision||'')}</td>
-                        <td>${esc(a.interest_level||'')}</td>
-                        <td>${esc(a.flags||'')}</td>`;
-        tbody.appendChild(tr);
-      });
-      // Fill assignment applicant select
-      const sel = $('#as-app'); sel.innerHTML='';
-      list.forEach(a=> sel.appendChild(new Option(a.name||a.full_name||'', a.name||a.full_name||'')));
-      filterApplicants();
-    }
-    function onHostsLoaded(list){
-      $('#ov-hosts').textContent = list.length;
-      const tbody = $('#hosts-table tbody');
-      tbody.innerHTML='';
-      list.forEach(h=>{
-        const assigned = Number(h.assigned||0);
-        const cap = Number(h.capacity||0);
-        const left = cap - assigned;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${esc(h.name||'')}</td>
-                        <td>${esc(h.building||'')}</td>
-                        <td>${esc(h.room||'')}</td>
-                        <td>${esc(h.capacity||'')}</td>
-                        <td>${assigned}</td>
-                        <td>${isNaN(left)?'':left}</td>
-                        <td>${esc(h.notes||'')}</td>`;
-        tbody.appendChild(tr);
-      });
-      const sel = $('#as-host'); sel.innerHTML='';
-      list.forEach(h=> sel.appendChild(new Option((h.name||'')+ (h.room?` • ${h.room}`:''), h.name||'')));
-    }
-    function onAssignmentsLoaded(list){
-      $('#ov-assignments').textContent = list.length;
-      const tbody = $('#assignments-table tbody');
-      tbody.innerHTML='';
-      list.forEach(a=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${esc(a.applicant||a.app||'')}</td>
-                        <td>${esc(a.host||'')}</td>
-                        <td>${esc(a.status||'')}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-    function onEngagementLoaded(list){
-      const tbody = $('#eng-table tbody');
-      tbody.innerHTML='';
-      list.forEach(r=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${esc(r.applicant||'')}</td>
-                        <td>${esc(r.invite_sent||'')}</td>
-                        <td>${esc(r.attending||'')}</td>
-                        <td>${esc(r.checked_in||'')}</td>
-                        <td>${esc(r.no_show||'')}</td>
-                        <td>${esc(r.notes||'')}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-    function onCommsLoaded(list){
-      const wrap = $('#comms-summary');
-      wrap.innerHTML='';
-      const total = list.length;
-      const delivered = list.filter(r=> (r.status||'').toLowerCase()==='delivered').length;
-      const opened = list.reduce((n,r)=> n + (Number(r.opens)||0), 0);
-      const clicked = list.reduce((n,r)=> n + (Number(r.clicks)||0), 0);
-      const cards = [
-        [`Total messages`, total],
-        [`Delivered`, delivered],
-        [`Opens (sum)`, opened],
-        [`Clicks (sum)`, clicked]
-      ];
-      for(const [label, val] of cards){
-        const c = document.createElement('div');
-        c.className='card'; c.style.flex='1 1 200px';
-        c.innerHTML = `<strong>${label}</strong><div class="stat">${val}</div>`;
-        wrap.appendChild(c);
-      }
-    }
-
-    // Save assignment (in-memory only)
-    $('#as-save').addEventListener('click', ()=>{
-      const app = $('#as-app').value; const host = $('#as-host').value; const status = $('#as-status').value;
-      if(!app||!host){ toast('Pick an applicant and a host'); return; }
-      const rec = {applicant:app, host, status};
-      state.assignments.push(rec);
-      onAssignmentsLoaded(state.assignments);
-      toast('Assignment saved');
-    });
-
-    // Exporters
-    const exporters = [
-      ['#export-app','applicants', 'name,state,program,decision,interest_level,flags'],
-      ['#export-host','hosts', 'name,building,room,capacity,assigned,notes'],
-      ['#export-asg','assignments', 'applicant,host,status'],
-      ['#export-eng','engagement', 'applicant,invite_sent,attending,checked_in,no_show,notes'],
-      ['#export-comms','comms', 'timestamp,recipient,campaign,subject,status,opens,clicks']
-    ];
-    exporters.forEach(([sel,key,headers])=>{
-      $(sel).addEventListener('click', ()=>{
-        const rows = state[key];
-        const csv = toCSV(rows, headers);
-        download(csv, `${key}.csv`, 'text/csv');
-      });
-    });
-
+    // ---------------------------- Export + Templates ----------------------------
+    const exporters = {
+      '#export-app': ()=> exportCSV('applicants.csv', state.applicants),
+      '#export-host': ()=> exportCSV('hosts.csv', state.hosts),
+      '#export-asg':  ()=> exportCSV('assignments.csv', state.assignments),
+      '#export-eng':  ()=> exportCSV('engagement.csv', state.engagement),
+      '#export-comms':()=> exportCSV('comms.csv', state.comms)
+    };
+    Object.keys(exporters).forEach(sel=> $(sel).addEventListener('click', exporters[sel]));
     $('#dl-templates').addEventListener('click', ()=>{
-      exporters.forEach(([,key,headers])=>{
-        const csv = headers + '\n';
-        download(csv, `${key}-template.csv`, 'text/csv');
-      });
-      toast('Templates downloaded');
+      const files={
+        'applicants-template.csv':'id,name,state,program,decision,interest_level,arrival_time\n',
+        'hosts-template.csv':'id,name,building,room,capacity,available_hour,phone,email,notes\n',
+        'assignments-template.csv':'applicant,host,status,score\n',
+        'engagement-template.csv':'applicant,invite_sent,attending,checked_in,no_show,notes\n',
+        'comms-template.csv':'timestamp,recipient,campaign,subject,status,opens,clicks\n'
+      };
+      Object.entries(files).forEach(([name,content])=> download(content,name,'text/csv'));
     });
+    function exportCSV(name, rows){ if(!rows?.length){ toast('Nothing to export'); return; } const headers=Object.keys(rows[0]); const out=[headers.join(',')].concat(rows.map(r=> headers.map(h=> csvEscape(r[h])).join(','))).join('\n'); download(out, name, 'text/csv'); }
+    function csvEscape(v){ if(v==null) return ''; const s=String(v); return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; }
+    function download(content, filename, type){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([content],{type})); a.download=filename; a.click(); setTimeout(()=> URL.revokeObjectURL(a.href), 1500); }
 
-    function toCSV(rows, headers){
-      const head = headers.split(',');
-      const lines = [headers];
-      (rows||[]).forEach(r=>{
-        const line = head.map(h=> (r[h]??'').toString().replace(/,/g,' '));
-        lines.push(line.join(','));
+    // ---------------------------- Utils ----------------------------
+    function esc(s){ return (s??'').toString().replace(/[&<>"']/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c])); }
+    function escAttr(s){ return String(s??'').replace(/["<>]/g,''); }
+
+    // Build the printable host card HTML safely (avoid literal </script>)
+    function getHostPrintHTML(h, students, nameOf){
+      const list = (students||[]).map(s=> `<li>${esc(nameOf(s))}</li>`).join('') || '<li>—</li>';
+      const html = `<!doctype html><html><head><meta charset="utf-8"><title>${esc(h.name||'Host')}</title>
+      <style>body{font-family:system-ui,Arial;margin:32px}.card{border:2px solid #111;padding:16px;border-radius:12px;width:360px}.name{font-size:24px;font-weight:800}</style>
+      </head><body><div class="card"><div class="name">${esc(h.name||'Host')}</div><div>${esc(h.email||'')}</div><div>${esc(h.phone||'')}</div><div>${esc(h.building||'')} ${esc(h.room||'')}</div><hr><div><strong>Students</strong><ol>${list}</ol></div></div>
+      <script>window.print();<\/script></body></html>`; // <-- escaped closing script tag
+      return html;
+    }
+
+    // ---------------------------- Tests ----------------------------
+    const T = { pass:0, fail:0, lines:[] };
+    function test(name, fn){ try{ fn(); T.pass++; T.lines.push(`✅ ${name}`);} catch(e){ T.fail++; T.lines.push(`❌ ${name} -> ${e.message}`);} }
+    function assert(cond, msg){ if(!cond) throw new Error(msg||'assert failed'); }
+    function runTests(){ T.pass=T.fail=0; T.lines=[];
+      // Test parseCSV basic + quoted commas
+      test('parseCSV basic rows', ()=>{ const csv = 'id,name\n1,Jane\n2,Sam\n'; const rows=parseCSV(csv); assert(rows.length===2,'rows!=2'); assert(rows[0].id==='1','row0.id'); });
+      test('parseCSV quoted field', ()=>{ const csv='name,notes\n"Doe, Jane","He said ""hi"""\n'; const rows=parseCSV(csv); assert(rows[0].name==='Doe, Jane','quoted name'); assert(rows[0].notes==='He said "hi"','escaped quotes'); });
+      // Test extractHour
+      test('extractHour 09:30', ()=>{ assert(extractHour('09:30')===9,'09:30'); });
+      test('extractHour 21:05', ()=>{ assert(extractHour('21:05')===21,'21:05'); });
+      test('extractHour invalid -> NaN', ()=>{ assert(Number.isNaN(extractHour('nope')),'invalid should be NaN'); });
+      // Test printable HTML escaping for </script>
+      test('print HTML escapes </script>', ()=>{
+        const html=getHostPrintHTML({name:'X'}, [], s=>s);
+        assert(!html.includes('</script>'), 'contains literal </script>');
+        assert(html.includes('<\/script>'), 'does not include escaped <\/script>');
       });
-      return lines.join('\n');
+      // Summary
+      const out = `Tests passed: ${T.pass}, failed: ${T.fail}\n` + T.lines.join('\n');
+      const pre = document.getElementById('test-output'); if(pre) pre.textContent = out; toast(`Self tests: ${T.pass} passed, ${T.fail} failed`);
     }
+    document.getElementById('run-tests')?.addEventListener('click', runTests);
+    // Auto-run once at startup
+    runTests();
 
-    function download(content, filename, type){
-      const blob = new Blob([content], {type});
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = filename; a.click();
-      setTimeout(()=> URL.revokeObjectURL(a.href), 2000);
-    }
+    // ---------------------------- Boot (optionally seed) ----------------------------
+    // Uncomment to seed sample data quickly for testing
+    // (function seed(){
+    //   state.applicants=[{id:'A1',name:'Jane Doe',state:'MN',program:'Physics',decision:'admit',interest_level:'high',arrival_time:'09:30'},
+    //                     {id:'A2',name:'Sam Lee',state:'IL',program:'CS',decision:'admit',interest_level:'med',arrival_time:'14:10'},
+    //                     {id:'A3',name:'Priya N',state:'CA',program:'History',decision:'waitlist',interest_level:'low',arrival_time:'20:00'}];
+    //   state.hosts=[{id:'H1',name:'Alex P',building:'Watson',room:'201',capacity:2,available_hour:'09:00',phone:'555-1010',email:'alexp@example.edu'},
+    //               {id:'H2',name:'Jordan K',building:'Davis',room:'3B',capacity:1,available_hour:'21:00',phone:'555-2020',email:'jordank@example.edu'}];
+    //   onApplicants(); onHosts();
+    // })();
 
-    // Brand modal
-    const brandModal = $('#brandModal');
-    $('#brandBtn').addEventListener('click', ()=> brandModal.showModal());
-    $('#brandClose').addEventListener('click', ()=> brandModal.close());
-
-    // Toast
-    function toast(msg){
-      const wrap = $('#toast');
-      const el = document.createElement('div');
-      el.className = 't fade-in';
-      el.textContent = msg;
-      wrap.appendChild(el);
-      setTimeout(()=>{ el.remove(); }, 2800);
-    }
-
-    // Utils
-    function esc(s){ return (s||'').toString().replace(/[&<>"']/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c])); }
-
-    // Basic self-test
-    setTimeout(()=>{
-      const out = $('#test-output');
-      out.textContent = 'OK: UI loaded\nOK: Tabs active\nOK: Exporters wired';
-    }, 200);
+  })();
   </script>
 </body>
 </html>
