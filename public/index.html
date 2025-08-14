@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TOC / Hosting — Ops Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <div class="c-block" aria-hidden="true">C</div>
+      <div class="titles">
+        <h1>TOC / Hosting — Prep & Execution</h1>
+        <p class="tag">Know it all without being a know‑it‑all.</p>
+      </div>
+    </div>
+    <nav class="nav">
+      <button id="btn-refresh" class="btn">Refresh</button>
+      <button id="btn-admin" class="btn outline">Admin</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="kpis card">
+      <h2 class="h-playfair">Vitals</h2>
+      <div id="kpi-grid" class="grid kpi-grid"></div>
+    </section>
+
+    <section class="grid two">
+      <div class="card">
+        <h3>Tasks</h3>
+        <div id="tasks"></div>
+      </div>
+      <div class="card">
+        <h3>Hosts</h3>
+        <div id="hosts"></div>
+      </div>
+    </section>
+
+    <section class="grid two">
+      <div class="card">
+        <h3>Budget</h3>
+        <div id="budget"></div>
+      </div>
+      <div class="card">
+        <h3>Comms</h3>
+        <div id="comms"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Pinned Docs</h3>
+      <ul id="docs" class="docs"></ul>
+    </section>
+  </main>
+
+  <dialog id="admin-dialog">
+    <form method="dialog" class="admin-form">
+      <h2 class="h-playfair">Admin Tools</h2>
+      <p class="sub">This panel is for quick updates. The site is gated, but writes also require your secret header.</p>
+
+      <label>Admin Secret
+        <input type="password" id="admin-secret" placeholder="X-Admin-Secret" />
+      </label>
+
+      <details>
+        <summary>Import Asana JSON</summary>
+        <textarea id="asana-json" rows="6" placeholder="{ ...Asana export... }"></textarea>
+        <button data-action="asana" class="btn">Import</button>
+      </details>
+
+      <details>
+        <summary>Upload Hosts CSV</summary>
+        <p class="hint">Columns: id,name,email,status,class_year,dorm,notes</p>
+        <textarea id="hosts-csv" rows="6" placeholder="id,name,email,status,class_year,dorm,notes"></textarea>
+        <button data-action="hosts" class="btn">Upload</button>
+      </details>
+
+      <details>
+        <summary>Budget: add line</summary>
+        <div class="row">
+          <input id="b-cat" placeholder="Category" />
+          <input id="b-desc" placeholder="Description" />
+        </div>
+        <div class="row">
+          <input id="b-plan" placeholder="Planned (USD)" />
+          <input id="b-spent" placeholder="Spent (USD)" />
+        </div>
+        <button data-action="budget-add" class="btn">Add</button>
+      </details>
+
+      <details>
+        <summary>Docs: add link</summary>
+        <div class="row">
+          <input id="d-title" placeholder="Title" />
+          <input id="d-url" placeholder="URL (https://...)" />
+        </div>
+        <button data-action="docs-add" class="btn">Add</button>
+      </details>
+
+      <menu>
+        <button value="cancel" class="btn outline">Close</button>
+        <button data-action="export" class="btn">Export Snapshot</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
