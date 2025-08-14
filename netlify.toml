@@ -1,22 +1,20 @@
 [build]
-  command = "npm run build"
   publish = "public"
 
 [functions]
   node_bundler = "esbuild"
-  external_node_modules = ["@netlify/blobs","csv-parse","dayjs","nanoid"]
+  external_node_modules = ["@netlify/blobs"]
 
-# Optional: enable edge functions path if we want future middleware
-#[[edge_functions]]
-#  path = "/api/*"
-#  function = "guard"
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
 
-# Security headers (extra hardening in addition to Netlify defaults)
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
+    Referrer-Policy = "no-referrer-when-downgrade"
     Permissions-Policy = "geolocation=(), microphone=(), camera=()"
-    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    Content-Security-Policy = "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; script-src 'self';"

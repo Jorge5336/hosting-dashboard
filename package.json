@@ -1,20 +1,13 @@
 {
   "name": "carleton-toc-netlify",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "netlify dev",
-    "build": "echo 'static site'",
-    "format": "prettier -w ."
+    "build": "node ./scripts/build.js"
   },
   "dependencies": {
-    "@netlify/blobs": "^7.0.0",
-    "csv-parse": "^5.5.6",
-    "dayjs": "^1.11.11",
-    "nanoid": "^5.0.7"
-  },
-  "devDependencies": {
-    "prettier": "^3.3.3"
+    "@netlify/blobs": "^6.4.0"
   }
 }

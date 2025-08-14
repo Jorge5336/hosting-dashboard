@@ -1,114 +1,150 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TOC / Hosting — Ops Dashboard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Carleton TOC — Hosting Prep & Execution</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="site-header">
+  <header class="topbar">
     <div class="brand">
-      <div class="c-block" aria-hidden="true">C</div>
-      <div class="titles">
-        <h1>TOC / Hosting — Prep & Execution</h1>
-        <p class="tag">Know it all without being a know‑it‑all.</p>
-      </div>
+      <span class="wordmark">Carleton</span>
+      <span class="divider">|</span>
+      <span class="appname">TOC — Hosting Prep & Execution</span>
     </div>
-    <nav class="nav">
-      <button id="btn-refresh" class="btn">Refresh</button>
-      <button id="btn-admin" class="btn outline">Admin</button>
+    <nav class="actions">
+      <button id="open-admin" class="btn maize">Admin</button>
     </nav>
   </header>
 
-  <main class="container">
-    <section class="kpis card">
-      <h2 class="h-playfair">Vitals</h2>
-      <div id="kpi-grid" class="grid kpi-grid"></div>
+  <main id="app" class="container">
+    <section id="error-panel" class="card hidden">
+      <h2>Oops.</h2>
+      <p>Could not load data yet. If this is a fresh deploy, add some data via <strong>Admin</strong>.</p>
+      <div class="tips">
+        <details>
+          <summary>Why am I seeing this?</summary>
+          <ul>
+            <li>No seed data in storage yet (normal on first run).</li>
+            <li>Functions failed to deploy (Netlify → Functions tab).</li>
+            <li>Missing <code>ADMIN_SECRET</code> env var.</li>
+          </ul>
+        </details>
+      </div>
+      <div class="cta-row">
+        <button id="error-open-admin" class="btn maize">Open Admin</button>
+        <button id="retry" class="btn outline">Retry</button>
+      </div>
     </section>
 
-    <section class="grid two">
-      <div class="card">
-        <h3>Tasks</h3>
-        <div id="tasks"></div>
+    <section class="grid">
+      <div class="kpi">
+        <h3 class="kpi-label">Tasks (Open)</h3>
+        <div id="kpi-tasks-open" class="kpi-value">–</div>
       </div>
-      <div class="card">
-        <h3>Hosts</h3>
-        <div id="hosts"></div>
+      <div class="kpi">
+        <h3 class="kpi-label">Tasks (Done)</h3>
+        <div id="kpi-tasks-done" class="kpi-value">–</div>
       </div>
-    </section>
-
-    <section class="grid two">
-      <div class="card">
-        <h3>Budget</h3>
-        <div id="budget"></div>
+      <div class="kpi">
+        <h3 class="kpi-label">Hosts</h3>
+        <div id="kpi-hosts" class="kpi-value">–</div>
       </div>
-      <div class="card">
-        <h3>Comms</h3>
-        <div id="comms"></div>
+      <div class="kpi">
+        <h3 class="kpi-label">Budget Used</h3>
+        <div id="kpi-budget" class="kpi-value">–</div>
       </div>
     </section>
 
     <section class="card">
-      <h3>Pinned Docs</h3>
-      <ul id="docs" class="docs"></ul>
+      <h2>Recent Tasks</h2>
+      <table id="tasks-table">
+        <thead>
+          <tr>
+            <th>Task</th><th>Section</th><th>Due</th><th>Status</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>Hosts</h2>
+      <table id="hosts-table">
+        <thead>
+          <tr>
+            <th>Name</th><th>Email</th><th>Status</th><th>Year</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </section>
   </main>
 
-  <dialog id="admin-dialog">
-    <form method="dialog" class="admin-form">
-      <h2 class="h-playfair">Admin Tools</h2>
-      <p class="sub">This panel is for quick updates. The site is gated, but writes also require your secret header.</p>
-
-      <label>Admin Secret
-        <input type="password" id="admin-secret" placeholder="X-Admin-Secret" />
-      </label>
-
-      <details>
-        <summary>Import Asana JSON</summary>
-        <textarea id="asana-json" rows="6" placeholder="{ ...Asana export... }"></textarea>
-        <button data-action="asana" class="btn">Import</button>
-      </details>
-
-      <details>
-        <summary>Upload Hosts CSV</summary>
-        <p class="hint">Columns: id,name,email,status,class_year,dorm,notes</p>
-        <textarea id="hosts-csv" rows="6" placeholder="id,name,email,status,class_year,dorm,notes"></textarea>
-        <button data-action="hosts" class="btn">Upload</button>
-      </details>
-
-      <details>
-        <summary>Budget: add line</summary>
+  <div id="admin-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="admin-title">
+    <div class="modal-content">
+      <div class="modal-head">
+        <h2 id="admin-title">Admin</h2>
+        <button id="close-admin" class="icon-btn" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <label class="stack">
+          <span>Admin secret</span>
+          <input id="admin-secret" type="password" placeholder="Paste ADMIN_SECRET">
+        </label>
         <div class="row">
-          <input id="b-cat" placeholder="Category" />
-          <input id="b-desc" placeholder="Description" />
+          <button id="save-secret" class="btn maize">Save Secret</button>
+          <button id="clear-secret" class="btn outline">Clear</button>
         </div>
-        <div class="row">
-          <input id="b-plan" placeholder="Planned (USD)" />
-          <input id="b-spent" placeholder="Spent (USD)" />
-        </div>
-        <button data-action="budget-add" class="btn">Add</button>
-      </details>
+        <hr/>
+        <details>
+          <summary><strong>Import Asana JSON</strong> (paste full export)</summary>
+          <textarea id="asana-input" rows="8" placeholder="{ &quot;data&quot;: [ ... ] }"></textarea>
+          <button id="import-asana" class="btn">Import</button>
+        </details>
+        <details>
+          <summary><strong>Upload Hosts CSV</strong> (id,name,email,status,class_year,dorm,notes)</summary>
+          <textarea id="hosts-csv" rows="6" placeholder="id,name,email,status,class_year,dorm,notes"></textarea>
+          <button id="upload-hosts" class="btn">Upload</button>
+        </details>
+        <details>
+          <summary><strong>Add Budget Item</strong></summary>
+          <div class="grid2">
+            <input id="budget-desc" placeholder="Description">
+            <input id="budget-amount" placeholder="Amount (e.g., 125.50)">
+          </div>
+          <button id="add-budget" class="btn">Add</button>
+        </details>
+        <details>
+          <summary><strong>Add Doc Link</strong></summary>
+          <div class="grid2">
+            <input id="doc-title" placeholder="Title">
+            <input id="doc-url" placeholder="https://...">
+          </div>
+          <button id="add-doc" class="btn">Add</button>
+        </details>
+        <details>
+          <summary><strong>Add Comms Row</strong></summary>
+          <div class="grid2">
+            <input id="comms-channel" placeholder="Channel (IG, Email, etc.)">
+            <input id="comms-note" placeholder="Note">
+          </div>
+          <button id="add-comms" class="btn">Add</button>
+        </details>
+        <hr/>
+        <button id="export-json" class="btn outline">Export Snapshot</button>
+      </div>
+    </div>
+  </div>
 
-      <details>
-        <summary>Docs: add link</summary>
-        <div class="row">
-          <input id="d-title" placeholder="Title" />
-          <input id="d-url" placeholder="URL (https://...)" />
-        </div>
-        <button data-action="docs-add" class="btn">Add</button>
-      </details>
+  <footer class="footer">
+    <small>Built for a delightful home for intellectual enthusiasm. Also: coffee & playlists fuel this thing.</small>
+  </footer>
 
-      <menu>
-        <button value="cancel" class="btn outline">Close</button>
-        <button data-action="export" class="btn">Export Snapshot</button>
-      </menu>
-    </form>
-  </dialog>
-
-  <script type="module" src="/app.js"></script>
+  <script src="app.js" type="module"></script>
 </body>
 </html>
