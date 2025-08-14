@@ -1,96 +1,57 @@
-/* Carleton brand-informed theme
-   Colors per Communications: Blue #003069, Maize #FFD24F (web) */
 :root{
-  --blue:#003069;
-  --maize:#FFD24F;
-  --bg:#fafafa;
-  --fg:#0c1116;
-  --muted:#5b6676;
-  --panel:#ffffff;
-  --line:#e5e9f0;
-  --chip:#f1f4f9;
-  --accent: var(--blue);
-}
-@media (prefers-color-scheme: dark){
-  :root{
-    --bg:#0f1115;
-    --fg:#f2f5f7;
-    --muted:#a7b0bf;
-    --panel:#121620;
-    --line:#222b3a;
-    --chip:#0f1624;
-    --accent: var(--maize);
-  }
-}
-body[data-theme="dark"]{
-  --bg:#0f1115;
-  --fg:#f2f5f7;
-  --muted:#a7b0bf;
-  --panel:#121620;
-  --line:#222b3a;
-  --chip:#0f1624;
-  --accent: var(--maize);
+  --blue:#003069;       /* Carleton Blue */
+  --maize:#ffd24f;      /* Carleton Maize */
+  --late:#000036;       /* Late Night */
+  --cream:#fffef5;      /* Neutral cream */
+  --ink:#1a1f26;        /* text */
+  --muted:#70767c;      /* neutral 7 */
+  --card:#ffffff;
+  --ring: rgba(0,48,105,.25);
 }
 
-html,body{height:100%}
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--fg);
-  font:15px/1.5 "Gotham", "Gotham SSm A","Gotham SSm B","Surveyor", Inter, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-}
-.site-header{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:14px 16px; background:var(--panel); border-bottom:1px solid var(--line);
-}
-.brand{display:flex; align-items:center; gap:12px}
-.brand-badge{
-  inline-size:42px; block-size:42px; border-radius:10px;
-  display:grid; place-items:center;
-  font-weight:800; letter-spacing:.02em;
-  color:#111; background:var(--maize);
-  box-shadow:0 1px 0 rgba(0,0,0,.06);
-}
-.brand-title{font-size:18px; margin:0}
-.brand-sub{margin:.25rem 0 0 0}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--cream);color:var(--ink);font:16px/1.5 Montserrat,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+h1,h2{font-family:"Playfair Display",serif;color:var(--late);line-height:1.2;margin:.2rem 0 1rem}
+h1 em{font-style:italic;font-weight:600}
+.container{max-width:1100px;margin:0 auto;padding:24px}
 
-.tabs{display:flex; flex-wrap:wrap; gap:8px; padding:8px 16px; background:var(--panel); border-bottom:1px solid var(--line)}
-.tab-btn{
-  appearance:none; border:1px solid var(--line); background:var(--chip); color:var(--fg);
-  padding:8px 12px; border-radius:999px; cursor:pointer;
+.site-head{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:var(--blue);color:#fff}
+.brand{display:flex;align-items:center;gap:.5rem;font-weight:700}
+.brand .cray{display:inline-grid;place-items:center;background:var(--maize);color:var(--late);width:26px;height:26px;border-radius:50%;font-size:14px}
+.brand .wordmark{letter-spacing:.3px}
+.meta{display:flex;gap:.5rem;align-items:center}
+.pill{border:1px solid rgba(255,255,255,.6);border-radius:999px;padding:2px 10px;font-size:12px}
+.pill-seed{background:rgba(255,210,79,.18);border-color:rgba(255,210,79,.6);color:#fff}
+
+.intro .aside{color:var(--muted);max-width:60ch}
+
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0}
+.kpi{background:var(--card);border:1px solid #e5e7eb;border-radius:12px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.kpi h3{margin:0 0 .4rem;font-weight:700}
+.kpi .value{font-size:28px;font-weight:700}
+.kpi .meta{font-size:12px;color:var(--muted)}
+.kpi .bar{height:8px;background:#eae8e3;border-radius:6px;overflow:hidden;margin-top:8px}
+.kpi .bar>span{display:block;height:100%;background:var(--blue)}
+
+.timeline ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.timeline li{background:var(--card);border:1px solid #e5e7eb;border-radius:12px;padding:12px}
+.timeline .due{font-size:12px;color:var(--muted)}
+
+.board .lanes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:10px}
+.lane{background:var(--card);border:1px solid #e5e7eb;border-radius:12px;padding:10px}
+.lane h3{font-size:16px;margin:.2rem .2rem .6rem}
+.card{border:1px solid #eef0f2;border-radius:10px;padding:10px;margin:8px;box-shadow:0 1px 1px rgba(0,0,0,.03)}
+.card .title{font-weight:600}
+.card .row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.card.done{opacity:.6}
+.tag{display:inline-block;background:var(--maize);color:var(--late);font-size:11px;padding:2px 6px;border-radius:999px;margin-left:6px}
+
+.note-card{background:var(--card);border:1px dashed var(--ring);border-radius:12px;padding:14px}
+
+.site-foot{padding:30px 20px;color:var(--muted);text-align:center}
+
+@media (max-width:960px){
+  .kpis{grid-template-columns:1fr}
+  .timeline ul{grid-template-columns:1fr}
+  .board .lanes{grid-template-columns:1fr}
 }
-.tab-btn[aria-selected="true"]{ background:var(--maize); color:#111; border-color:transparent; font-weight:700 }
-
-main{padding:16px}
-.hidden{display:none !important}
-.row{display:flex; gap:16px; flex-wrap:wrap}
-.card{
-  background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px;
-}
-.stat{font-weight:800; font-size:28px; color:var(--accent)}
-.muted{color:var(--muted)}
-.h2{font-size:16px; margin:0 0 6px 0}
-
-input[type="text"], select, .btn{
-  font:inherit; padding:10px 12px; border:1px solid var(--line); border-radius:10px;
-  background:var(--chip); color:var(--fg);
-}
-.btn.primary{ background:var(--blue); color:#fff; border-color:transparent }
-.btn.subtle{ background:transparent }
-.header-actions .btn{ margin-left:8px }
-
-.table-wrap{overflow:auto; max-height:60vh}
-table{border-collapse:collapse; width:100%}
-th,td{padding:8px 10px; border-bottom:1px solid var(--line); text-align:left}
-th{position:sticky; top:0; background:var(--panel)}
-
-.chip-row{display:flex; gap:8px; flex-wrap:wrap}
-.chip{
-  background:var(--chip); border:1px solid var(--line); border-radius:999px; padding:6px 10px; cursor:pointer
-}
-.chip[aria-pressed="true"]{ background:var(--maize); color:#111; border-color:transparent; font-weight:700 }
-
-/* High-contrast links */
-a{ color: var(--blue); }
-body[data-theme="dark"] a{ color: var(--maize); } 
