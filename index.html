@@ -1,227 +1,62 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TOC / Hosting — Prep & Execution Dashboard</title>
-  <meta name="color-scheme" content="light dark">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TOC / Hosting Prep & Execution</title>
+  <meta name="description" content="A delightful home for operational enthusiasm." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Brand alternates: Montserrat (Gotham alt) + Playfair (Surveyor alt) -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <div id="authGate" class="auth-gate hidden">
-    <div class="card auth-card">
-      <h1>Carleton — TOC/Hosting Dashboard</h1>
-      <p class="subhead">Password required</p>
-      <div id="authSetup" class="hidden">
-        <label>Set a new password</label>
-        <input id="newPass1" type="password" placeholder="New password" />
-        <input id="newPass2" type="password" placeholder="Confirm password" />
-        <button id="setPassBtn" class="btn primary">Save password</button>
-        <p class="muted small">This is a client‑side lock. For true protection, use Netlify password or Cloudflare Access.</p>
-      </div>
-      <div id="authLogin">
-        <label>Password</label>
-        <input id="loginPass" type="password" placeholder="Enter password" />
-        <button id="loginBtn" class="btn primary">Enter</button>
-        <p class="muted small"><a href="#" id="showSetupLink">First time? Set a password.</a></p>
-      </div>
-      <div id="authMsg" class="msg"></div>
-    </div>
-  </div>
-
-  <header class="topbar">
+  <header class="site-head">
     <div class="brand">
-      <div class="cray" aria-hidden="true"></div>
-      <span>Carleton — TOC/Hosting</span>
+      <span class="cray" aria-hidden="true">✷</span>
+      <span class="wordmark">Carleton</span>
     </div>
-    <nav class="nav">
-      <button data-view="overview" class="tab active">Overview</button>
-      <button data-view="phases" class="tab">Phases</button>
-      <button data-view="asana" class="tab">Asana</button>
-      <button data-view="hosts" class="tab">Hosts & Vetting</button>
-      <button data-view="budget" class="tab">Budget</button>
-      <button data-view="comms" class="tab">Comms</button>
-      <button data-view="docs" class="tab">Docs</button>
-      <button data-view="admin" class="tab">Admin</button>
+    <nav class="meta">
+      <!-- Admin removed for now -->
+      <span class="pill pill-seed" id="seedMode">Seed mode</span>
     </nav>
-    <div class="spacer"></div>
-    <button id="lockBtn" class="btn ghost">Lock</button>
   </header>
 
-  <main id="views">
-    <section id="view-overview" class="view active">
-      <div class="grid">
-        <div class="card">
-          <h2>At a Glance</h2>
-          <div class="stats" id="overviewStats"></div>
-        </div>
-        <div class="card">
-          <h2>Upcoming</h2>
-          <ul id="upcomingList" class="list"></ul>
-        </div>
-        <div class="card">
-          <h2>Milestones</h2>
-          <ul id="milestoneList" class="list"></ul>
-        </div>
+  <main class="container">
+    <section class="intro">
+      <h1><em>TOC / Hosting</em> — prep & execution</h1>
+      <p class="aside">Fresh deploy, clean slate. Data is seeded so you can see the shape of things. When you’re ready, we’ll wire the live feeds back in.</p>
+    </section>
+
+    <section class="kpis" id="kpis">
+      <!-- cards inserted by JS -->
+    </section>
+
+    <section class="timeline">
+      <h2>Next up</h2>
+      <ul id="nextUp"></ul>
+    </section>
+
+    <section class="board">
+      <h2>Workboard</h2>
+      <div class="lanes" id="lanes">
+        <!-- lanes injected -->
       </div>
     </section>
 
-    <section id="view-phases" class="view">
-      <div class="card">
-        <h2>Project Phases</h2>
-        <p class="muted small">Auto‑groups Asana by section when you import; add manual items too.</p>
-        <div id="phaseContainer"></div>
-        <div class="row mt">
-          <input id="phaseName" placeholder="New phase name (e.g., Phase 4 — Placement)" />
-          <button id="addPhaseBtn" class="btn">Add Phase</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="view-asana" class="view">
-      <div class="card">
-        <h2>Asana Import</h2>
-        <p class="muted small">Paste Asana JSON (exported via API) and click “Import”.</p>
-        <textarea id="asanaInput" placeholder="Paste Asana JSON here…" rows="10"></textarea>
-        <div class="row">
-          <button id="importAsanaBtn" class="btn primary">Import Asana JSON</button>
-          <button id="clearAsanaBtn" class="btn danger">Clear Asana Data</button>
-        </div>
-      </div>
-      <div class="card">
-        <h2>Asana Summary</h2>
-        <div id="asanaSummary"></div>
-        <div class="table-wrap">
-          <table id="asanaTable" class="table"></table>
-        </div>
-      </div>
-    </section>
-
-    <section id="view-hosts" class="view">
-      <div class="card">
-        <h2>Hosts & Vetting</h2>
-        <div class="row">
-          <input type="file" id="hostsCsv" accept=".csv" />
-          <button id="importHostsBtn" class="btn">Import CSV</button>
-          <button id="exportHostsBtn" class="btn">Export Hosts JSON</button>
-          <button id="clearHostsBtn" class="btn danger">Clear Hosts</button>
-        </div>
-        <p class="muted small">CSV should include a header row. If it has a <code>Status</code> column (Approved/Pending/Rejected), counts appear below.</p>
-        <div id="hostCounts" class="stats"></div>
-        <div class="table-wrap">
-          <table id="hostsTable" class="table"></table>
-        </div>
-      </div>
-    </section>
-
-    <section id="view-budget" class="view">
-      <div class="card">
-        <h2>Budget</h2>
-        <div class="row">
-          <input id="budCat" placeholder="Category (e.g., Vouchers)" />
-          <input id="budPlanned" type="number" step="0.01" placeholder="Planned $" />
-          <input id="budSpent" type="number" step="0.01" placeholder="Spent $" />
-          <button id="addBudBtn" class="btn">Add</button>
-          <button id="exportBudBtn" class="btn">Export Budget JSON</button>
-          <button id="clearBudBtn" class="btn danger">Clear Budget</button>
-        </div>
-        <div id="budgetTotals" class="stats"></div>
-        <div class="table-wrap">
-          <table id="budgetTable" class="table"></table>
-        </div>
-      </div>
-    </section>
-
-    <section id="view-comms" class="view">
-      <div class="card">
-        <h2>Comms</h2>
-        <div class="row">
-          <input id="commsWhen" type="date" />
-          <input id="commsChan" placeholder="Channel (e.g., IG, Email)" />
-          <input id="commsAudience" placeholder="Audience" />
-          <input id="commsWhat" placeholder="Message / CTA" />
-          <input id="commsLink" placeholder="Link (optional)" />
-          <select id="commsStatus">
-            <option value="Planned">Planned</option>
-            <option value="Queued">Queued</option>
-            <option value="Sent">Sent</option>
-          </select>
-          <button id="addCommsBtn" class="btn">Add</button>
-          <button id="exportCommsBtn" class="btn">Export Comms JSON</button>
-          <button id="clearCommsBtn" class="btn danger">Clear Comms</button>
-        </div>
-        <div class="table-wrap">
-          <table id="commsTable" class="table"></table>
-        </div>
-      </div>
-    </section>
-
-    <section id="view-docs" class="view">
-      <div class="card">
-        <h2>Docs & Links</h2>
-        <div class="row">
-          <input id="docLabel" placeholder="Label (e.g., Slate Form)" />
-          <input id="docUrl" placeholder="https://…" />
-          <button id="addDocBtn" class="btn">Add</button>
-          <button id="exportDocsBtn" class="btn">Export Docs JSON</button>
-          <button id="clearDocsBtn" class="btn danger">Clear Docs</button>
-        </div>
-        <ul id="docsList" class="list linklist"></ul>
-      </div>
-    </section>
-
-    <section id="view-admin" class="view">
-      <div class="card">
-        <h2>Admin</h2>
-        <div class="grid two">
-          <div>
-            <h3>Password</h3>
-            <label>Current password</label>
-            <input id="curPass" type="password" />
-            <label>New password</label>
-            <input id="newPassA" type="password" />
-            <label>Confirm new password</label>
-            <input id="newPassB" type="password" />
-            <button id="changePassBtn" class="btn">Change Password</button>
-            <div id="passMsg" class="msg"></div>
-          </div>
-          <div>
-            <h3>Data Import/Export</h3>
-            <div class="row">
-              <button id="exportAllBtn" class="btn primary">Export All</button>
-              <input type="file" id="importAllFile" accept="application/json" />
-              <button id="importAllBtn" class="btn">Import All</button>
-            </div>
-            <p class="muted small">Exports a single JSON with Asana data, Hosts, Budget, Comms, Docs, and Phases. Stored locally in your browser.</p>
-          </div>
-        </div>
-        <hr/>
-        <div>
-          <h3>Hosting</h3>
-          <p class="muted small">For real password protection on GitHub Pages, use an access gateway like Cloudflare Access, or deploy to Netlify and enable a site password. This app is static (no backend).</p>
-          <details>
-            <summary>GitHub Pages deploy steps</summary>
-            <ol>
-              <li>Create a new repo, e.g., <code>toc-hosting-dashboard</code></li>
-              <li>Upload these files, commit to <code>main</code></li>
-              <li>Settings → Pages → Source: <code>Deploy from a branch</code>; Branch: <code>main</code> / root</li>
-              <li>Wait for Pages to build; visit the URL</li>
-            </ol>
-          </details>
-        </div>
+    <section class="notes">
+      <h2>Scratchpad</h2>
+      <div id="notes" class="note-card">
+        First run — using demo data. Add hosts, button up incentives, and check copy on the handbook.
       </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <span>Carleton — Admissions • A delightful home for intellectual enthusiasts.</span>
+  <footer class="site-foot">
+    <small>Made with curiosity, coffee, and a little Midwestern humility.</small>
   </footer>
 
-  <script src="assets/js/utils.js"></script>
-  <script src="assets/js/asana.js"></script>
-  <script src="assets/js/app.js"></script>
+  <script src="/app.js" defer></script>
 </body>
 </html>
